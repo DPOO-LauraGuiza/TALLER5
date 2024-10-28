@@ -7,7 +7,6 @@ import uniandes.dpoo.hamburguesas.mundo.ProductoMenu;
 
 public class ComboTest {
 	
-	
     @Test
     public void testCombo() {
         ArrayList<ProductoMenu> items = new ArrayList<>();
