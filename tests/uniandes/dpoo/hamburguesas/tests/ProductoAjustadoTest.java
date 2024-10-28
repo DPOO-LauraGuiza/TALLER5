@@ -24,10 +24,10 @@ public class ProductoAjustadoTest {
 
 	@Test
     public void testProductoAjustado() {
-		assertEquals("Corral", productoBase.getNombre(), "El nombre del producto no es el esperado.");
-	    assertEquals(14000, productoBase.getPrecio(), "El precio del producto no es el esperado.");
+		assertEquals("Corral", productoBase.getNombre(), "El nombre del producto no es");
+	    assertEquals(14000, productoBase.getPrecio(), "El precio del producto no es");
 	    Ingrediente agregadoEsperado = new Ingrediente("huevo", 2500);
-	    assertEquals(agregadoEsperado, agregados.get(0), "El ingrediente esperado no se encuentra en la lista");
+	    assertEquals(agregadoEsperado, agregados.get(0), "El ingrediente no esta");
 	    List<Ingrediente> expected = new ArrayList<>();
         expected.add(new Ingrediente("lechuga", 1000));
         expected.add(new Ingrediente("tomate", 1000));
@@ -36,14 +36,14 @@ public class ProductoAjustadoTest {
 	
 	@Test
 	public void testGetNombre() {
-		assertEquals("Corral", productoBase.getNombre(), "El nombre del producto no es el esperado.");
+		assertEquals("Corral", productoBase.getNombre(), "El nombre del producto no es");
 	}
 	
 	@Test 
 	public void testGetPrecio() {
 		ProductoAjustado productoAjustado = new ProductoAjustado(productoBase);
 		int precioEsperado= 2500+14000;
-		assertEquals(precioEsperado, productoAjustado.getPrecio(),"El precio no es el esperado");
+		assertEquals(precioEsperado, productoAjustado.getPrecio(),"El precio no es");
 	}
 
 }

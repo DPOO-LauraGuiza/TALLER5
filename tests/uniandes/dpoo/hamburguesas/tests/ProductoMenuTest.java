@@ -16,23 +16,23 @@ public class ProductoMenuTest {
 
 	@Test
 	public void testProductoMenu() {
-		assertEquals("Corral", producto.getNombre(), "El nombre del producto no es el esperado.");
-	    assertEquals(14000, producto.getPrecio(), "El precio del producto no es el esperado.");
+		assertEquals("Corral", producto.getNombre(), "El nombre no es.");
+	    assertEquals(14000, producto.getPrecio(), "El precio del producto no es");
 	}
 
 	@Test
 	void testGetNombre() {
-		assertEquals("Corral", producto.getNombre(), "El nombre devuelto por getNombre() no es correcto.");
+		assertEquals("Corral", producto.getNombre(), "El nombre devuelto no es ");
 	}
 
 	@Test
 	public void testGetPrecio() {
-		assertEquals(14000, producto.getPrecio(), "El precio devuelto por getPrecio() no es correcto.");
+		assertEquals(14000, producto.getPrecio(), "El precio no es");
 	}
 
 	@Test
 	void testGenerarTextoFactura() {
 		String facturaEsperada = "Corral\n            14000\n";
-		assertEquals(facturaEsperada, producto.generarTextoFactura(), "El texto de factura no es el esperado.");
+		assertEquals(facturaEsperada, producto.generarTextoFactura(), "El texto de factura no es.");
 	}
 }
