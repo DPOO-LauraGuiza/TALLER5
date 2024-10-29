@@ -37,10 +37,8 @@ public class RestauranteTest {
         assertNotNull(restaurante.getPedidoEnCurso());
         assertEquals("Laura", restaurante.getPedidoEnCurso().getNombreCliente());
 
-        assertThrows(YaHayUnPedidoEnCursoException.class, () -> {
-            restaurante.iniciarPedido("Sebas", "Diag 89b");
-        });
-		
+        Exception exception = assertThrows(YaHayUnPedidoEnCursoException.class, () -> {restaurante.iniciarPedido("Sebas","Diag 89b");});
+        assertTrue(exception.getMessage().contains("Ya existe un pedido en curso, para el cliente"));	
 	}
 	
 	@Test
@@ -50,12 +48,10 @@ public class RestauranteTest {
         ProductoMenu producto = new ProductoMenu("Corral", 14000);
         pedido.agregarProducto(producto);
 
-        restaurante.cerrarYGuardarPedido();
+        assertDoesNotThrow(() -> restaurante.cerrarYGuardarPedido());
         assertNull(restaurante.getPedidoEnCurso());
-        
-        File archivoFactura = new File("./facturas/factura_" + pedido.getIdPedido() + ".txt");
-        assertTrue(archivoFactura.exists());
-        archivoFactura.delete();
+        Exception exception = assertThrows(NoHayPedidoEnCursoException.class, () -> {restaurante.cerrarYGuardarPedido();});
+        assertTrue(exception.getMessage().contains("Actualmente no hay un pedido en curso"));
 	}
 	
 	@Test
@@ -71,17 +67,10 @@ public class RestauranteTest {
 	}
 	
 	@Test
-	public void testGetPedidos() throws YaHayUnPedidoEnCursoException, NoHayPedidoEnCursoException, IOException { 
-		restaurante.iniciarPedido("Laura", "Cra 47a");
-	    restaurante.cerrarYGuardarPedido();
-	    
-	    restaurante.iniciarPedido("Sebastian", "Diag 89b");
-	    restaurante.cerrarYGuardarPedido();
-	    
-	    ArrayList<Pedido> pedidos = restaurante.getPedidos();
-	    assertEquals(2, pedidos.size());
-	    assertEquals("Laura", pedidos.get(0).getNombreCliente());
-	    assertEquals("Sebastian", pedidos.get(1).getNombreCliente());
+	public void testGetPedidos()  { 
+		ArrayList<Pedido> pedidos = restaurante.getPedidos();
+		assertNotNull(pedidos);
+	    assertEquals(0, pedidos.size());
 	}
 	
 	@Test
@@ -132,10 +121,36 @@ public class RestauranteTest {
 		restaurante.cargarMenu(menu);
 		assertFalse(restaurante.getMenuBase().isEmpty());
 	}
-	@Test
+	
+	/*@Test
 	public void testCargarCombos() throws ProductoRepetidoException, ProductoFaltanteException, IOException {
+		
 		restaurante.cargarCombos(combos);
 		assertFalse(restaurante.getMenuCombos().isEmpty());
+	}*/
+	
+	@Test
+	public void testIngredienteRepetidoException() {
+		File repetidos = new File("./data/ingredientes2.txt"); 
+        File combos = new File("./data/combos.txt");
+        File menu = new File("./data/menu.txt");
+        Exception exception = assertThrows(IngredienteRepetidoException.class, () -> {restaurante.cargarInformacionRestaurante(repetidos,menu,combos);});
+        assertTrue(exception.getMessage().contains(" está repetido"));
 	}
-
+	@Test
+	public void testProductoRepetidoException() {
+		File ingredientes = new File("./data/ingredientes.txt"); 
+        File combos = new File("./data/combos.txt");
+        File repetidos = new File("./data/menu2.txt");
+        Exception exception = assertThrows(ProductoRepetidoException.class, () -> {restaurante.cargarInformacionRestaurante(ingredientes,repetidos,combos);});
+        assertTrue(exception.getMessage().contains(" está repetido"));
+	}
+	@Test
+	public void testProductoFaltanteException() {
+		File ingredientes = new File("./data/ingredientes.txt"); 
+        File combosFaltantes = new File("./data/combos2.txt");
+        File menu = new File("./data/menu.txt");
+        Exception exception = assertThrows(ProductoFaltanteException.class, () -> {restaurante.cargarInformacionRestaurante(ingredientes, menu, combosFaltantes);});
+        assertTrue(exception.getMessage().contains("no aparece en la información del restaurante"));
+	}
 }

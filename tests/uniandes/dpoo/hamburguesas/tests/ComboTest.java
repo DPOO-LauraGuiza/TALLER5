@@ -30,9 +30,11 @@ public class ComboTest {
 
         Combo combo = new Combo("Combo Corral Queso", 0.9, items);
 
-        String expectedFactura = "Combo Combo Corral Queso\n"+"             " + combo.getPrecio() + " Descuento: 0.9\n"+ "\n";
+        String expectedFactura = "Combo Combo Corral Queso\n"+ " Descuento: 0.9\n"+ "            " + combo.getPrecio()+"\n";
         assertEquals(expectedFactura, combo.generarTextoFactura());
-    }
+     }
+    
+    
 
 
     

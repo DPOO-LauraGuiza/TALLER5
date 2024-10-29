@@ -2,8 +2,6 @@ package uniandes.dpoo.hamburguesas.tests;
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import uniandes.dpoo.hamburguesas.mundo.Ingrediente;
 import uniandes.dpoo.hamburguesas.mundo.ProductoAjustado;
@@ -11,39 +9,68 @@ import uniandes.dpoo.hamburguesas.mundo.ProductoMenu;
 
 public class ProductoAjustadoTest {
 	private ProductoMenu productoBase;
+	private ProductoAjustado producto;
+	
 	ArrayList<Ingrediente> agregados = new ArrayList<>();
 	ArrayList<Ingrediente> eliminados = new ArrayList<>();
 
-	@BeforeEach
-	public void start() {
-		productoBase = new ProductoMenu("Corral", 14000);
-		agregados.add(new Ingrediente("huevo", 2500));
-		eliminados.add(new Ingrediente("lechuga", 1000));
-		eliminados.add(new Ingrediente("tomate", 1000));
-	}
-
 	@Test
     public void testProductoAjustado() {
+		productoBase = new ProductoMenu("Corral", 14000);
+		producto = new ProductoAjustado(productoBase);
+		Ingrediente huevo = new Ingrediente("huevo", 2500);
+		Ingrediente lechuga = new Ingrediente("lechuga", 1000);
+		Ingrediente tomate = new Ingrediente("tomate", 1000);
+		agregados.add(huevo);
+		eliminados.add(tomate);
+		eliminados.add(lechuga);
 		assertEquals("Corral", productoBase.getNombre(), "El nombre del producto no es");
 	    assertEquals(14000, productoBase.getPrecio(), "El precio del producto no es");
-	    Ingrediente agregadoEsperado = new Ingrediente("huevo", 2500);
-	    assertEquals(agregadoEsperado, agregados.get(0), "El ingrediente no esta");
-	    List<Ingrediente> expected = new ArrayList<>();
-        expected.add(new Ingrediente("lechuga", 1000));
-        expected.add(new Ingrediente("tomate", 1000));
-        assertEquals(expected, eliminados);
+	    assertEquals(huevo,agregados.get(0), "El ingrediente no esta");
+	    List<Ingrediente> expectedE = new ArrayList<>();
+        expectedE.add(tomate);
+        expectedE.add(lechuga);
+        assertEquals(expectedE, eliminados);
 	}
 	
 	@Test
 	public void testGetNombre() {
-		assertEquals("Corral", productoBase.getNombre(), "El nombre del producto no es");
+		productoBase = new ProductoMenu("Corral", 14000);
+		producto = new ProductoAjustado(productoBase);
+		assertEquals("Corral", producto.getNombre(), "El nombre del producto no es");
 	}
 	
 	@Test 
 	public void testGetPrecio() {
+		productoBase = new ProductoMenu("Corral", 14000);
+		Ingrediente huevo = new Ingrediente("huevo", 2500);
 		ProductoAjustado productoAjustado = new ProductoAjustado(productoBase);
+		productoAjustado.getAgregados().add(huevo);
 		int precioEsperado= 2500+14000;
-		assertEquals(precioEsperado, productoAjustado.getPrecio(),"El precio no es");
+		
+		assertEquals(precioEsperado, productoAjustado.getPrecio());
 	}
-
+	
+	@Test
+	public void testGenerarTextoFactura() {
+		productoBase = new ProductoMenu("Corral", 14000);
+		producto = new ProductoAjustado(productoBase);
+		Ingrediente huevo = new Ingrediente("huevo", 2500);
+		Ingrediente lechuga = new Ingrediente("lechuga", 1000);
+		Ingrediente tomate = new Ingrediente("tomate", 1000);
+		agregados.add(huevo);
+		eliminados.add(tomate);
+		eliminados.add(lechuga);
+		producto.getAgregados().add(huevo);
+		producto.getEliminados().add(tomate);
+		producto.getEliminados().add(lechuga);
+		
+	    String expectedFactura = "Corral"+"\n"
+	    						+ "    +" + huevo.getNombre( ) + "                " + huevo.getCostoAdicional( )
+	    						+"    -"+ tomate.getNombre( )
+	    						+"    -" + lechuga.getNombre( )
+	    						+"            " + producto.getPrecio( ) 
+	    						+"\n";
+	    assertEquals(expectedFactura, producto.generarTextoFactura());		
+	}
 }

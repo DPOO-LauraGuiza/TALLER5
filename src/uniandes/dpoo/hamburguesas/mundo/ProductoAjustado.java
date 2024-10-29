@@ -21,6 +21,10 @@ public class ProductoAjustado implements Producto
      * La lista de ingrediente que el usuario quiere eliminar.
      */
     private ArrayList<Ingrediente> eliminados;
+    
+    public ArrayList<Ingrediente> getAgregados(){
+    	return agregados;
+    }
 
     /**
      * Construye un nuevo producto ajustado a partir del producto base y sin modificaciones
@@ -31,12 +35,17 @@ public class ProductoAjustado implements Producto
         this.productoBase = productoBase;
         agregados = new ArrayList<Ingrediente>( );
         eliminados = new ArrayList<Ingrediente>( );
+        
     }
 
+	public ArrayList<Ingrediente> getEliminados() {
+		return eliminados;
+	}
+	
     @Override
-    public String getNombre( )
+    public String getNombre()
     {
-        return productoBase.getNombre( );
+        return productoBase.getNombre();
     }
 
     /**
@@ -45,7 +54,14 @@ public class ProductoAjustado implements Producto
     @Override
     public int getPrecio( )
     {
-        return 0;
+    	int precioBase = productoBase.getPrecio();
+    	
+        for (Ingrediente ingrediente : agregados) {
+            precioBase += ingrediente.getCostoAdicional();
+        }
+        return precioBase;
+        
+        
     }
 
     /**
@@ -57,7 +73,7 @@ public class ProductoAjustado implements Producto
     public String generarTextoFactura( )
     {
         StringBuffer sb = new StringBuffer( );
-        sb.append( productoBase );
+        sb.append( productoBase.getNombre()+"\n" );
         for( Ingrediente ing : agregados )
         {
             sb.append( "    +" + ing.getNombre( ) );
